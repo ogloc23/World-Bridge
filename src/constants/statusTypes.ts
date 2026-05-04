@@ -1,0 +1,8 @@
+export const STATUS = [
+  "PENDING",
+  "IN_TRANSIT",
+  "ON_HOLD",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED",
+  "CANCELLED"
+];
