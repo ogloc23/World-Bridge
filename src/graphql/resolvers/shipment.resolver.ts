@@ -2,6 +2,18 @@ import ShipmentService from "../../services/shipment.service";
 import TrackingService from "../../services/tracking.service";
 import { Context } from "../../types/context";
 
+interface CreateShipmentInput {
+  senderName: string;
+  receiverName: string;
+  originPort: string;
+  destination: string;
+  currentLocation: string;
+  weight: number;
+  carrier?: string;
+  shipmentDate: string;
+  deliveryDate?: string;
+}
+
 const shipmentService = new ShipmentService();
 const trackingService = new TrackingService();
 
@@ -29,7 +41,7 @@ const shipmentResolver = {
   Mutation: {
     createShipment: async (
       _: unknown,
-      { input }: { input: any },
+      { input }: { input: CreateShipmentInput },
       context: Context,
     ) => {
       if (!context.admin) {
