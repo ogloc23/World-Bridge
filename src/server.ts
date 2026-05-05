@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import { shipmentTypeDefs } from "./graphql/schema/shipment.schema";
 import { trackingHistoryTypeDefs } from "./graphql/schema/tracking.schema";
 import { authTypeDefs } from "./graphql/schema/auth.schema";
@@ -29,6 +30,8 @@ const startServer = async () => {
     typeDefs: [shipmentTypeDefs, trackingHistoryTypeDefs, authTypeDefs],
     resolvers,
     csrfPrevention: false,
+    introspection: true,
+    plugins: [ApolloServerPluginLandingPageLocalDefault()],
   });
 
   await server.start();
