@@ -26,7 +26,6 @@
 //   }
 // `;
 
-
 export const trackingHistoryTypeDefs = `#graphql
 
   type TrackingHistory {
@@ -40,12 +39,12 @@ export const trackingHistoryTypeDefs = `#graphql
     updatedAt: String
   }
 
-  type TrackingResponse {
-    shipment: Shipment
-    history: [TrackingHistory]
+  type ShipmentEventLog {
+    status: ShipmentStatus!
+    location: String!
   }
 
   type Query {
-    trackShipment(trackingId: String!): TrackingResponse
+    trackShipment(trackingId: String!): Shipment
   }
 `;

@@ -19,4 +19,8 @@ export interface ShipmentType {
   carrier?: string;
   shipmentDate: string;
   deliveryDate?: string;
+  eventLog?: {
+    status: ShipmentStatus;
+    location: string;
+  }[];
 }

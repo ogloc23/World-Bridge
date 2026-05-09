@@ -14,10 +14,14 @@ class TrackingService {
     }
 
     const history = await trackingRepo.findMany({ shipmentId: shipment._id });
+    const eventLog = history.map((entry) => ({
+      status: entry.status,
+      location: entry.location,
+    }));
 
     return {
       shipment,
-      history,
+      eventLog,
     };
   }
 

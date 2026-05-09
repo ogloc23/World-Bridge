@@ -8,13 +8,15 @@ const trackingResolver = {
     trackShipment: async (
       _: unknown,
       { trackingId }: { trackingId: string },
-      context: Context,
     ) => {
       const result = await trackingService.trackShipment(trackingId);
-      // Only return history if admin
+      const shipmentObject =
+        typeof result.shipment.toObject === "function"
+          ? result.shipment.toObject()
+          : { ...result.shipment };
       return {
-        shipment: result.shipment,
-        history: context.admin ? result.history : [],
+        ...shipmentObject,
+        eventLog: result.eventLog,
       };
     },
   },
