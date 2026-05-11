@@ -35,6 +35,7 @@ const resolvers = {
       formatDate(parent.updatedAt),
   },
   Admin: {
+    id: (parent: InstanceType<typeof Admin>) => parent._id.toString(),
     createdAt: (parent: InstanceType<typeof Admin>) =>
       formatDate(parent.createdAt),
     updatedAt: (parent: InstanceType<typeof Admin>) =>
