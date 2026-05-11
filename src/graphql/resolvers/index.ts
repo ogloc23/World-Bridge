@@ -17,10 +17,21 @@ const resolvers = {
     ...shipmentResolver.Mutation,
   },
   Shipment: {
+    id: (parent: InstanceType<typeof Shipment>) =>
+      parent._id?.toString?.() ?? parent.id,
     shipmentDate: (parent: InstanceType<typeof Shipment>) =>
       formatDate(parent.shipmentDate),
     deliveryDate: (parent: InstanceType<typeof Shipment>) =>
       parent.deliveryDate ? formatDate(parent.deliveryDate) : null,
+    eventLog: async (parent: InstanceType<typeof Shipment>) => {
+      const history = await TrackingHistory.find({ shipmentId: parent._id })
+        .sort({ date: 1 })
+        .lean();
+      return history.map((entry) => ({
+        status: entry.status,
+        location: entry.location,
+      }));
+    },
     createdAt: (parent: InstanceType<typeof Shipment>) =>
       formatDate(parent.createdAt),
     updatedAt: (parent: InstanceType<typeof Shipment>) =>

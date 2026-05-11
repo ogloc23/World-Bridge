@@ -21,7 +21,7 @@ export const shipmentTypeDefs = `#graphql
     carrier: String
     shipmentDate: String!
     deliveryDate: String
-    eventLog: [TrackingHistory]
+    eventLog: [ShipmentEventLog]
     createdAt: String
     updatedAt: String
   }
