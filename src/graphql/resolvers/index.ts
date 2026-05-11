@@ -27,6 +27,9 @@ const resolvers = {
       const history = await TrackingHistory.find({ shipmentId: parent._id })
         .sort({ date: 1 })
         .lean();
+      if (!history.length) {
+        return [{ status: parent.status, location: parent.currentLocation }];
+      }
       return history.map((entry) => ({
         status: entry.status,
         location: entry.location,

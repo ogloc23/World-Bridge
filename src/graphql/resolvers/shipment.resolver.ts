@@ -47,7 +47,15 @@ const shipmentResolver = {
       if (!context.admin) {
         throw new Error("Not authenticated");
       }
-      return shipmentService.createShipment(input);
+      const shipment = await shipmentService.createShipment(input);
+      if (shipment) {
+        await trackingService.addTrackingHistory({
+          shipmentId: shipment._id.toString(),
+          location: shipment.currentLocation,
+          status: shipment.status,
+        });
+      }
+      return shipment;
     },
     updateShipmentStatus: async (
       _: unknown,
