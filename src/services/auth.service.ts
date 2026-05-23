@@ -81,9 +81,15 @@ class AuthService {
     return adminRepo.findMany({});
   }
 
-  // ❌ DEACTIVATE ADMIN
+  // ❌ DELETE DEACTIVATED ADMIN
   async deactivateAdmin(id: string) {
-    return adminRepo.update({ _id: id }, { isActive: false });
+    const admin = await adminRepo.delete({ _id: id });
+
+    if (!admin) {
+      throw new Error("Admin not found");
+    }
+
+    return admin;
   }
 }
 

@@ -21,6 +21,7 @@ export const shipmentTypeDefs = `#graphql
     carrier: String
     shipmentDate: String!
     deliveryDate: String
+    createdBy: ID!
     eventLog: [ShipmentEventLog]
     createdAt: String
     updatedAt: String

@@ -63,6 +63,12 @@ const ShipmentSchema = new mongoose.Schema(
     deliveryDate: {
       type: Date,
     },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      required: true,
+    },
   },
   { timestamps: true }
 );

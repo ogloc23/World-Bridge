@@ -20,11 +20,10 @@ const trackingService = new TrackingService();
 const shipmentResolver = {
   Query: {
     shipments: async (_: unknown, __: unknown, context: Context) => {
-      // Assuming auth is required
       if (!context.admin) {
         throw new Error("Not authenticated");
       }
-      return shipmentService.getAllShipments();
+      return shipmentService.getAllShipments(context.admin);
     },
     shipment: async (
       _: unknown,
@@ -34,7 +33,16 @@ const shipmentResolver = {
       if (!context.admin) {
         throw new Error("Not authenticated");
       }
-      return shipmentService.getShipmentByTrackingId(trackingId);
+      const shipment = await shipmentService.getShipmentByTrackingId(
+        trackingId,
+        context.admin,
+      );
+
+      if (!shipment) {
+        throw new Error("Shipment not found or unauthorized");
+      }
+
+      return shipment;
     },
   },
 
@@ -47,7 +55,7 @@ const shipmentResolver = {
       if (!context.admin) {
         throw new Error("Not authenticated");
       }
-      const shipment = await shipmentService.createShipment(input);
+      const shipment = await shipmentService.createShipment(input, context.admin._id);
       if (shipment) {
         await trackingService.addTrackingHistory({
           shipmentId: shipment._id.toString(),
@@ -69,15 +77,20 @@ const shipmentResolver = {
       if (!context.admin) {
         throw new Error("Not authenticated");
       }
-      const shipment = await shipmentService.updateShipmentStatus(input);
-      if (shipment) {
-        // Optionally add to tracking history
-        await trackingService.addTrackingHistory({
-          shipmentId: shipment._id.toString(),
-          location: input.currentLocation,
-          status: input.status,
-        });
+      const shipment = await shipmentService.updateShipmentStatus(
+        input,
+        context.admin,
+      );
+
+      if (!shipment) {
+        throw new Error("Shipment not found or unauthorized");
       }
+
+      await trackingService.addTrackingHistory({
+        shipmentId: shipment._id.toString(),
+        location: input.currentLocation,
+        status: input.status,
+      });
       return shipment;
     },
   },
